@@ -22,8 +22,8 @@ public class TopicService {
         this.topicRepository = topicRepository;
     }
 
-    public Optional<TopicDto> findById(Integer id) {
-        return topicRepository.findById(id).map(obj -> this.mapper.convertValue(obj, TopicDto.class));
+    public Optional<Topic> findById(Integer id) {
+        return topicRepository.findById(id);
     }
 
     public Optional<TopicDto> create(TopicDto newTopic) {

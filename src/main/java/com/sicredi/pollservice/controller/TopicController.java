@@ -5,8 +5,6 @@ import com.sicredi.pollservice.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +19,6 @@ public class TopicController extends BaseController {
     @Autowired
     public TopicController(TopicService topicService) {
         this.topicService = topicService;
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<TopicDto> findById(@PathVariable Integer id) {
-        return topicService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()
