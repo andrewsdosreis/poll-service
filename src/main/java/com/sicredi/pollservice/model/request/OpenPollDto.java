@@ -1,4 +1,4 @@
-package com.sicredi.pollservice.model;
+package com.sicredi.pollservice.model.request;
 
 public class OpenPollDto {
 

@@ -1,14 +1,16 @@
-package com.sicredi.pollservice.model;
+package com.sicredi.pollservice.model.request;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
+import com.sicredi.pollservice.model.VoteOption;
 
 public class PollVote {
 
     private Integer topicId;
     private String userCpf;
     @Enumerated(EnumType.STRING)
-    private VoteEnum vote;
+    private VoteOption vote;
 
     public Integer getTopicId() {
         return topicId;
@@ -18,7 +20,7 @@ public class PollVote {
         return userCpf;
     }
    
-    public VoteEnum getVote() {
+    public VoteOption getVote() {
         return vote;
     }
 
