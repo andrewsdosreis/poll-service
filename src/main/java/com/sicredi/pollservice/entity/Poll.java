@@ -1,5 +1,6 @@
 package com.sicredi.pollservice.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -11,11 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "poll", schema = "poll")
-public class Poll {
+public class Poll implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
@@ -24,7 +25,6 @@ public class Poll {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "topic_id", nullable = false)
-    @JsonIgnore
     private Topic topic;
 
     @Column(name = "start_date")
@@ -33,8 +33,20 @@ public class Poll {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    public Poll() {
+        super();
+    }
+
     public Poll(Integer id, Topic topic, LocalDateTime startDate, LocalDateTime endDate) {
+        super();
         this.id = id;
+        this.topic = topic;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Poll(Topic topic, LocalDateTime startDate, LocalDateTime endDate) {
+        super();
         this.topic = topic;
         this.startDate = startDate;
         this.endDate = endDate;
