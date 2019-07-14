@@ -6,11 +6,6 @@ spring:
         driverClassName: com.mysql.cj.jdbc.Driver
         password: root
         username: root
-        type: com.zaxxer.hikari.HikariDataSource
-        hikari:
-            maximum-pool-size: 10
-            minimum-idle: 1
-            connection-test-query: 'SELECT 1'
     jpa:
         properties:
             hibernate: {dialect: org.hibernate.dialect.MySQL5InnoDBDialect}
