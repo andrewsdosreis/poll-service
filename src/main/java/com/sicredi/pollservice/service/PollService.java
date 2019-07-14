@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.Topic;
+import com.sicredi.pollservice.exception.PollAlreadyExistsException;
 import com.sicredi.pollservice.model.request.OpenPollDto;
 import com.sicredi.pollservice.model.response.PollDto;
 import com.sicredi.pollservice.repository.PollRepository;
@@ -34,6 +35,8 @@ public class PollService {
     public Optional<PollDto> openPoll(OpenPollDto openPoll) {
         Optional<Topic> topic = topicService.findById(openPoll.getTopicId());
 
+        checkIfPollAlreadyExists(openPoll);
+
         Integer pollDurationInMinutes = setDurationInMinutes(openPoll.getDurationInMinutes());
 
         Poll poll = new Poll(topic.get(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(pollDurationInMinutes));
@@ -46,6 +49,13 @@ public class PollService {
             return 1;
         } else {
             return durationInMinutes;
+        }
+    }
+
+    private void checkIfPollAlreadyExists(OpenPollDto openPoll) {
+        Optional<Poll> poll = pollRepository.findByTopic_Id(openPoll.getTopicId());
+        if (poll.isPresent()) {
+            throw new PollAlreadyExistsException(poll.get().getTopic().getName());
         }
     }
 
