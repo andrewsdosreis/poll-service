@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
+import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
 import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.request.PollVote;
@@ -41,8 +42,9 @@ public class VoteService {
         Optional<User> user = userService.findByCpf(pollVote.getUserCpf());
         Optional<Poll> poll = pollService.findByTopic(pollVote.getTopicId());
 
+        checkIfPollIsOpenToVote(poll);
         checkIfUserAlreadyHasVotedForPoll(user, poll);
-
+        
         Vote vote = new Vote(poll.get(), user.get(), pollVote.getVote());
 
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
@@ -55,17 +57,25 @@ public class VoteService {
         Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);
         Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.NO);
 
-        String result;
-
-        if (yesVotes > noVotes) {
-            result = "YES";
-        } else if (noVotes > yesVotes) {
-            result = "NO";
-        } else {
-            result = "DRAW";
-        }
+        String result = setPollResult(yesVotes, noVotes);
 
         return Optional.ofNullable(new PollResultDto(totalVotes, yesVotes, noVotes, result));
+    }
+
+    private String setPollResult(Integer yesVotes, Integer noVotes) {
+        if (yesVotes > noVotes) {
+            return "YES";
+        } else if (yesVotes < noVotes) {
+            return "NO";
+        } else {
+            return "DRAW";
+        }
+    }
+
+    private void checkIfPollIsOpenToVote(Optional<Poll> poll) {
+        if (!poll.get().isOpen()) {
+            throw new PollIsClosedException(poll.get().getTopic().getName());
+        }
     }
 
     private void checkIfUserAlreadyHasVotedForPoll(Optional<User> user, Optional<Poll> poll) {

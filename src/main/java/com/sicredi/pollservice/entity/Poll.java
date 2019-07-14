@@ -84,7 +84,7 @@ public class Poll implements Serializable {
     }
 
     public boolean isOpen() {
-        return this.endDate.isBefore(LocalDateTime.now());
+        return this.endDate.isAfter(LocalDateTime.now());
     }
     
 }
