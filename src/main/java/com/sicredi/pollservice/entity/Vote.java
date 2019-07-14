@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.sicredi.pollservice.model.VoteEnum;
+import com.sicredi.pollservice.model.VoteOption;
 
 @Entity
 @Table(name = "vote", schema = "poll")
@@ -35,13 +35,13 @@ public class Vote implements Serializable {
 
     @Column(name = "vote", nullable = false)
     @Enumerated(EnumType.STRING)
-    private VoteEnum vote;
+    private VoteOption vote;
 
     public Vote() {
         super();
     }
 
-    public Vote(Integer id, Poll poll, User user, VoteEnum vote) {
+    public Vote(Integer id, Poll poll, User user, VoteOption vote) {
         super();
         this.id = id;
         this.poll = poll;
@@ -49,7 +49,7 @@ public class Vote implements Serializable {
         this.vote = vote;
     }
 
-    public Vote(Poll poll, User user, VoteEnum vote) {
+    public Vote(Poll poll, User user, VoteOption vote) {
         super();
         this.poll = poll;
         this.user = user;
@@ -80,11 +80,11 @@ public class Vote implements Serializable {
         this.user = user;
     }
 
-    public VoteEnum getVote() {
+    public VoteOption getVote() {
         return vote;
     }
 
-    public void setVote(VoteEnum vote) {
+    public void setVote(VoteOption vote) {
         this.vote = vote;
     }
 

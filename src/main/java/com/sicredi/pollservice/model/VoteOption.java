@@ -1,5 +1,5 @@
 package com.sicredi.pollservice.model;
 
-public enum VoteEnum {
+public enum VoteOption {
     YES, NO;
 }
