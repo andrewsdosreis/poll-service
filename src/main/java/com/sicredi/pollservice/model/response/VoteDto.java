@@ -1,9 +1,11 @@
-package com.sicredi.pollservice.model;
+package com.sicredi.pollservice.model.response;
 
 import java.io.Serializable;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
+import com.sicredi.pollservice.model.VoteOption;
 
 public class VoteDto implements Serializable {
 
@@ -13,13 +15,13 @@ public class VoteDto implements Serializable {
     private PollDto poll;
     private UserDto user;
     @Enumerated(EnumType.STRING)
-    private VoteEnum vote;
+    private VoteOption vote;
 
     public VoteDto() {
         super();
     }
 
-    public VoteDto(Integer id, PollDto poll, UserDto user, VoteEnum vote) {
+    public VoteDto(Integer id, PollDto poll, UserDto user, VoteOption vote) {
         super();
         this.id = id;
         this.poll = poll;
@@ -43,7 +45,7 @@ public class VoteDto implements Serializable {
         return user;
     }
 
-    public VoteEnum getVote() {
+    public VoteOption getVote() {
         return vote;
     }
 

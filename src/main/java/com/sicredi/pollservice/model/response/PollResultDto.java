@@ -1,4 +1,4 @@
-package com.sicredi.pollservice.model;
+package com.sicredi.pollservice.model.response;
 
 public class PollResultDto {
 
