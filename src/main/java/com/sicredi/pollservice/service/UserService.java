@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.User;
+import com.sicredi.pollservice.exception.UserNotFoundException;
 import com.sicredi.pollservice.model.response.UserDto;
 import com.sicredi.pollservice.repository.UserRepository;
 
@@ -27,7 +28,15 @@ public class UserService {
     }
 
     public Optional<User> findByCpf(String cpf) {
-        return userRepository.findByCpf(cpf);
+        Optional<User> user = userRepository.findByCpf(cpf);
+        checkIfUserNotFound(user, cpf);
+        return user;
+    }
+
+    private void checkIfUserNotFound(Optional<User> user, String cpf) {
+        if (!user.isPresent()) {
+            throw new UserNotFoundException(cpf);
+        }
     }
 
 }
