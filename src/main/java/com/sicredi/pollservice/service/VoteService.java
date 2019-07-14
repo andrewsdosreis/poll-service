@@ -6,10 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
-import com.sicredi.pollservice.model.PollResultDto;
-import com.sicredi.pollservice.model.PollVote;
-import com.sicredi.pollservice.model.VoteDto;
-import com.sicredi.pollservice.model.VoteEnum;
+import com.sicredi.pollservice.model.VoteOption;
+import com.sicredi.pollservice.model.request.PollVote;
+import com.sicredi.pollservice.model.response.PollResultDto;
+import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.repository.VoteRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +49,8 @@ public class VoteService {
         Optional<Poll> poll = pollService.findByTopic(topicId);
 
         Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
-        Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteEnum.YES);
-        Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteEnum.NO);
+        Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);
+        Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.NO);
 
         String result;
 

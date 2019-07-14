@@ -1,8 +1,8 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.model.OpenPollDto;
-import com.sicredi.pollservice.model.PollDto;
-import com.sicredi.pollservice.model.PollResultDto;
+import com.sicredi.pollservice.model.request.OpenPollDto;
+import com.sicredi.pollservice.model.response.PollDto;
+import com.sicredi.pollservice.model.response.PollResultDto;
 import com.sicredi.pollservice.service.PollService;
 import com.sicredi.pollservice.service.VoteService;
 

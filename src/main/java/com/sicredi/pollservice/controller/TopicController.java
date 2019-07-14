@@ -1,6 +1,7 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.model.TopicDto;
+import com.sicredi.pollservice.model.request.CreateTopic;
+import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TopicController extends BaseController {
     }
 
     @PostMapping()
-    public ResponseEntity<TopicDto> insert(@RequestBody TopicDto newTopic) {
+    public ResponseEntity<TopicDto> insert(@RequestBody CreateTopic newTopic) {
         return topicService.create(newTopic).map(obj -> this.created(obj))
                 .orElseGet(() -> this.expectationFailed(null));
     }

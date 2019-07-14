@@ -4,7 +4,8 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Topic;
-import com.sicredi.pollservice.model.TopicDto;
+import com.sicredi.pollservice.model.request.CreateTopic;
+import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.repository.TopicRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class TopicService {
         return topicRepository.findById(id);
     }
 
-    public Optional<TopicDto> create(TopicDto newTopic) {
+    public Optional<TopicDto> create(CreateTopic newTopic) {
         return Optional.ofNullable(this.mapper.convertValue(newTopic, Topic.class))
                 .flatMap(obj -> Optional.ofNullable(this.topicRepository.save(obj)))
                 .map(obj -> this.mapper.convertValue(obj, TopicDto.class));

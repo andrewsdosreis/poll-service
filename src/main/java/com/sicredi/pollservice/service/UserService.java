@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.User;
-import com.sicredi.pollservice.model.UserDto;
+import com.sicredi.pollservice.model.response.UserDto;
 import com.sicredi.pollservice.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.model.PollVote;
-import com.sicredi.pollservice.model.VoteDto;
+import com.sicredi.pollservice.model.request.PollVote;
+import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.service.VoteService;
 
 import org.springframework.beans.factory.annotation.Autowired;

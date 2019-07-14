@@ -1,6 +1,6 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.model.UserDto;
+import com.sicredi.pollservice.model.response.UserDto;
 import com.sicredi.pollservice.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,8 +6,8 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.Topic;
-import com.sicredi.pollservice.model.OpenPollDto;
-import com.sicredi.pollservice.model.PollDto;
+import com.sicredi.pollservice.model.request.OpenPollDto;
+import com.sicredi.pollservice.model.response.PollDto;
 import com.sicredi.pollservice.repository.PollRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
