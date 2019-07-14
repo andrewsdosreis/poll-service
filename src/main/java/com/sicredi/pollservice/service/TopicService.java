@@ -42,7 +42,7 @@ public class TopicService {
     private void checkIfTopicAlreadyExists(CreateTopic newTopic) {
         Optional<Topic> topic = topicRepository.findByName(newTopic.getName());
 
-        if (!topic.isPresent()) {
+        if (topic.isPresent()) {
             throw new TopicAlreadyExistsException(newTopic.getName());
         }
     }
