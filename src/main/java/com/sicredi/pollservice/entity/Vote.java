@@ -1,41 +1,56 @@
 package com.sicredi.pollservice.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sicredi.pollservice.model.VoteEnum;
 
 @Entity
 @Table(name = "vote", schema = "poll")
-public class Vote {
+public class Vote implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
     @Column(name = "id", updatable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "poll_id", nullable = false)
-    @JsonIgnore
     private Poll poll;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnore
     private User user;
 
     @Column(name = "vote", nullable = false)
+    @Enumerated(EnumType.STRING)
     private VoteEnum vote;
 
+    public Vote() {
+        super();
+    }
+
     public Vote(Integer id, Poll poll, User user, VoteEnum vote) {
+        super();
         this.id = id;
+        this.poll = poll;
+        this.user = user;
+        this.vote = vote;
+    }
+
+    public Vote(Poll poll, User user, VoteEnum vote) {
+        super();
         this.poll = poll;
         this.user = user;
         this.vote = vote;
@@ -72,5 +87,5 @@ public class Vote {
     public void setVote(VoteEnum vote) {
         this.vote = vote;
     }
-    
+
 }

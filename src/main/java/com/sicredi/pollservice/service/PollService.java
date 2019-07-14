@@ -27,6 +27,10 @@ public class PollService {
         this.topicService = topicService;
     }
 
+    public Optional<Poll> findByTopic(Integer topicId) {
+        return pollRepository.findByTopic_Id(topicId);
+    }
+
     public Optional<PollDto> openPoll(OpenPollDto openPoll) {
         Optional<Topic> topic = topicService.findById(openPoll.getTopicId());
         
