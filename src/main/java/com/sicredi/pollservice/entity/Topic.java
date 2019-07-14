@@ -1,5 +1,7 @@
 package com.sicredi.pollservice.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,9 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "topic", schema = "poll")
-public class Topic {
+public class Topic implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
@@ -21,7 +25,12 @@ public class Topic {
     @Column(name = "description")
     private String description;
 
+    public Topic() {
+        super();
+    }
+
     public Topic(Integer id, String name, String description) {
+        super();
         this.id = id;
         this.name = name;
         this.description = description;
