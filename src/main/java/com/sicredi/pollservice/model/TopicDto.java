@@ -9,6 +9,10 @@ public class TopicDto implements Serializable {
     private String name;
     private String description;
 
+    public TopicDto() {
+        super();
+    }
+
     public TopicDto(Integer id, String name, String description) {
         super();
         this.id = id;
