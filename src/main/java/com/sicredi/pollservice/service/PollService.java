@@ -33,7 +33,7 @@ public class PollService {
 
     public Optional<PollDto> openPoll(OpenPollDto openPoll) {
         Optional<Topic> topic = topicService.findById(openPoll.getTopicId());
-        
+
         Integer pollDurationInMinutes = setDurationInMinutes(openPoll.getDurationInMinutes());
 
         Poll poll = new Poll(topic.get(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(pollDurationInMinutes));

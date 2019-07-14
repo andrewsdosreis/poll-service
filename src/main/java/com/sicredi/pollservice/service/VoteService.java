@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
+import com.sicredi.pollservice.model.PollResultDto;
 import com.sicredi.pollservice.model.PollVote;
 import com.sicredi.pollservice.model.VoteDto;
+import com.sicredi.pollservice.model.VoteEnum;
 import com.sicredi.pollservice.repository.VoteRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,26 @@ public class VoteService {
         Vote vote = new Vote(poll.get(), user.get(), pollVote.getVote());
 
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
+    }
+
+    public Optional<PollResultDto> getPollResult(Integer topicId) {
+        Optional<Poll> poll = pollService.findByTopic(topicId);
+
+        Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
+        Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteEnum.YES);
+        Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteEnum.NO);
+
+        String result;
+
+        if (yesVotes > noVotes) {
+            result = "YES";
+        } else if (noVotes > yesVotes) {
+            result = "NO";
+        } else {
+            result = "DRAW";
+        }
+
+        return Optional.ofNullable(new PollResultDto(totalVotes, yesVotes, noVotes, result));
     }
 
 }
