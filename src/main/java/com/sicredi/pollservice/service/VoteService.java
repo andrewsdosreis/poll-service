@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
+import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
 import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.request.PollVote;
 import com.sicredi.pollservice.model.response.PollResultDto;
@@ -40,6 +41,8 @@ public class VoteService {
         Optional<User> user = userService.findByCpf(pollVote.getUserCpf());
         Optional<Poll> poll = pollService.findByTopic(pollVote.getTopicId());
 
+        checkIfUserAlreadyHasVotedForPoll(user, poll);
+
         Vote vote = new Vote(poll.get(), user.get(), pollVote.getVote());
 
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
@@ -63,6 +66,13 @@ public class VoteService {
         }
 
         return Optional.ofNullable(new PollResultDto(totalVotes, yesVotes, noVotes, result));
+    }
+
+    private void checkIfUserAlreadyHasVotedForPoll(Optional<User> user, Optional<Poll> poll) {
+        Optional<Vote> vote = voteRepository.findByUserAndPoll(user.get(), poll.get());
+        if (vote.isPresent()) {
+            throw new UserAlreadyHasVotedForPollException(user.get().getCpf(), poll.get().getTopic().getName());
+        }
     }
 
 }
