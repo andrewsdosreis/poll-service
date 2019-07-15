@@ -1,8 +1,8 @@
 package com.sicredi.pollservice.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -80,7 +80,7 @@ public class VoteServiceTests {
 
         try {
             voteService.create(pollVote);
-        } catch(PollIsClosedException e) {
+        } catch (PollIsClosedException e) {
             assertNotNull(e);
         }
     }
@@ -99,7 +99,7 @@ public class VoteServiceTests {
 
         try {
             voteService.create(pollVote);
-        } catch(UserAlreadyHasVotedForPollException e) {
+        } catch (UserAlreadyHasVotedForPollException e) {
             assertNotNull(e);
         }
     }
@@ -115,9 +115,9 @@ public class VoteServiceTests {
 
         Optional<PollResultDto> result = voteService.getPollResult(1);
         assertTrue(result.isPresent());
-        assertEquals(result.get().getYesVotes(), 5);
-        assertEquals(result.get().getNoVotes(), 5);
-        assertEquals(result.get().getTotalVotes(), 10);
-        assertEquals(result.get().getResult(), "DRAW");
+        assertTrue(result.get().getYesVotes().equals(5));
+        assertTrue(result.get().getNoVotes().equals(5));
+        assertTrue(result.get().getTotalVotes().equals(10));
+        assertEquals(result.get().getResult(), "DRAW");        
     }
 }
