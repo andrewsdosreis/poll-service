@@ -33,10 +33,8 @@ public class TopicService {
 
     public Optional<TopicDto> create(CreateTopic newTopic) {
         checkIfTopicAlreadyExists(newTopic);
-
-        return Optional.ofNullable(this.mapper.convertValue(newTopic, Topic.class))
-                .flatMap(obj -> Optional.ofNullable(this.topicRepository.save(obj)))
-                .map(obj -> this.mapper.convertValue(obj, TopicDto.class));
+        Topic topic = mapper.convertValue(newTopic, Topic.class);
+        return Optional.ofNullable(mapper.convertValue(topicRepository.save(topic), TopicDto.class));
     }
 
     private void checkIfTopicAlreadyExists(CreateTopic newTopic) {
