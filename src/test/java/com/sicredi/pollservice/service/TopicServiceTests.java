@@ -74,7 +74,6 @@ public class TopicServiceTests {
         CreateTopic newTopic = new CreateTopic("Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         
-        when(mapper.convertValue(newTopic, Topic.class)).thenReturn(topic);
         when(topicRepository.findByName(Mockito.anyString())).thenReturn(Optional.ofNullable(topic));
 
         try {
