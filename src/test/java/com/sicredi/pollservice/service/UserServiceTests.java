@@ -44,7 +44,7 @@ public class UserServiceTests {
         when(userRepository.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(null));
 
         try {
-            Optional<User> result = userService.findByCpf("01926679040");
+            userService.findByCpf("01926679040");
         } catch (UserNotFoundException e) {
             assertNotNull(e);
         }
