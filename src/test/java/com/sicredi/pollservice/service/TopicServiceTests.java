@@ -39,7 +39,7 @@ public class TopicServiceTests {
     public void test_findById_isValid() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         when(topicRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
-        Optional<Topic> result = topicRepository.findById(1);
+        Optional<Topic> result = topicService.findById(1);
         assertTrue(result.isPresent());
     }
 
