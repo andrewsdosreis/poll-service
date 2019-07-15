@@ -12,6 +12,12 @@ public class PollVote {
     @Enumerated(EnumType.STRING)
     private VoteOption vote;
 
+    public PollVote(Integer topicId, String userCpf, VoteOption vote) {
+        this.topicId = topicId;
+        this.userCpf = userCpf;
+        this.vote = vote;
+    }
+
     public Integer getTopicId() {
         return topicId;
     }
