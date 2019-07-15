@@ -12,6 +12,16 @@ spring:
         properties:
             hibernate: {dialect: org.hibernate.dialect.MySQL5InnoDBDialect}
 
+logging:
+  file: logs/poll-service.log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.sicredi.pollservice: DEBUG
+    org.hibernate: ERROR
+
 api:
     info:
         title: 'Poll Service Api'
