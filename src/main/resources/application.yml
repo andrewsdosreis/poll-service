@@ -3,7 +3,7 @@ spring:
         name: poll-service
     datasource:
         url: 'jdbc:mysql://localhost:3306/poll?reconnect=true&useTimezone=true&serverTimezone=UTC'
-        driverClassName: com.mysql.cj.jdbc.Driver
+        driverClassName: com.mysql.jdbc.Driver
         password: root
         username: root
     jpa:
