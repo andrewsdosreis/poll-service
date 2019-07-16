@@ -10,9 +10,9 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.Topic;
-import com.sicredi.pollservice.exception.PollAlreadyExistsException;
+import com.sicredi.pollservice.exception.TopicAlreadyHasAnOpenedPollException;
 import com.sicredi.pollservice.exception.PollNotFoundException;
-import com.sicredi.pollservice.model.request.OpenPollDto;
+import com.sicredi.pollservice.model.request.CreatePollDto;
 import com.sicredi.pollservice.model.response.PollDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.repository.PollRepository;
@@ -40,27 +40,27 @@ public class PollServiceTests {
     }
 
     @Test
-    public void test_findByTopic_isValid() {
+    public void test_findById_isValid() {
         Poll poll = new Poll(1,
                 new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil"),
                 LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
-        when(pollRepository.findByTopic_Id(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
-        Optional<Poll> result = pollService.findByTopic(1);
+        when(pollRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
+        Optional<Poll> result = pollService.findById(1);
         assertTrue(result.isPresent());
     }
 
     @Test
-    public void test_findByTopic_NotFoundException() {
-        when(pollRepository.findByTopic_Id(Mockito.anyInt())).thenReturn(Optional.ofNullable(null));
+    public void test_findById_NotFoundException() {
+        when(pollRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(null));
         try {
-            pollService.findByTopic(1);
+            pollService.findById(1);
         } catch (PollNotFoundException e) {
             assertNotNull(e);
         }
     }
 
     @Test
-    public void test_openPoll_isValid() {
+    public void test_create_isValid() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         TopicDto topicDto = new TopicDto(1, "Você é a favor do desarmamento?",
                 "Votação sobre o desarmamento no Brasil");
@@ -68,25 +68,27 @@ public class PollServiceTests {
         PollDto pollDto = new PollDto(1, topicDto, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
 
         when(topicService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
-        when(pollRepository.findByTopic_Id(Mockito.anyInt())).thenReturn(Optional.ofNullable(null));
+        when(pollRepository.findByTopic_IdAndEndDateAfter(Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+                .thenReturn(Optional.ofNullable(null));
         when(pollRepository.save(Mockito.any(Poll.class))).thenReturn(poll);
         when(mapper.convertValue(poll, PollDto.class)).thenReturn(pollDto);
 
-        Optional<PollDto> result = pollService.openPoll(new OpenPollDto(1, 1));
+        Optional<PollDto> result = pollService.create(new CreatePollDto(1, 1));
         assertTrue(result.isPresent());
     }
 
     @Test
-    public void test_openPoll_PollAlreadyExistsException() {
+    public void test_create_TopicAlreadyHasAnOpenedPoll() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
 
         when(topicService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
-        when(pollRepository.findByTopic_Id(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
+        when(pollRepository.findByTopic_IdAndEndDateAfter(Mockito.anyInt(), Mockito.any(LocalDateTime.class)))
+                .thenReturn(Optional.ofNullable(poll));
 
         try {
-            pollService.openPoll(new OpenPollDto(1, 1));
-        } catch(PollAlreadyExistsException e) {
+            pollService.create(new CreatePollDto(1, 1));
+        } catch (TopicAlreadyHasAnOpenedPollException e) {
             assertNotNull(e);
         }
     }

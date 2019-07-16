@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Topic;
 import com.sicredi.pollservice.exception.TopicAlreadyExistsException;
 import com.sicredi.pollservice.exception.TopicNotFoundException;
-import com.sicredi.pollservice.model.request.CreateTopic;
+import com.sicredi.pollservice.model.request.CreateTopicDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.repository.TopicRepository;
 
@@ -31,13 +31,13 @@ public class TopicService {
         return topic;
     }
 
-    public Optional<TopicDto> create(CreateTopic newTopic) {
+    public Optional<TopicDto> create(CreateTopicDto newTopic) {
         checkIfTopicAlreadyExists(newTopic);
         Topic topic = mapper.convertValue(newTopic, Topic.class);
         return Optional.ofNullable(mapper.convertValue(topicRepository.save(topic), TopicDto.class));
     }
 
-    private void checkIfTopicAlreadyExists(CreateTopic newTopic) {
+    private void checkIfTopicAlreadyExists(CreateTopicDto newTopic) {
         Optional<Topic> topic = topicRepository.findByName(newTopic.getName());
 
         if (topic.isPresent()) {

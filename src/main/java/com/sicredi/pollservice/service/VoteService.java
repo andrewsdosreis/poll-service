@@ -9,7 +9,7 @@ import com.sicredi.pollservice.entity.Vote;
 import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
 import com.sicredi.pollservice.model.VoteOption;
-import com.sicredi.pollservice.model.request.PollVote;
+import com.sicredi.pollservice.model.request.CreateVoteDto;
 import com.sicredi.pollservice.model.response.PollResultDto;
 import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.repository.VoteRepository;
@@ -38,20 +38,20 @@ public class VoteService {
         return Optional.ofNullable(mapper.convertValue(voteRepository.findById(id), VoteDto.class));
     }
 
-    public Optional<VoteDto> create(PollVote pollVote) {
-        Optional<User> user = userService.findByCpf(pollVote.getUserCpf());
-        Optional<Poll> poll = pollService.findByTopic(pollVote.getTopicId());
+    public Optional<VoteDto> create(CreateVoteDto createPoll) {
+        Optional<User> user = userService.findByCpf(createPoll.getUserCpf());
+        Optional<Poll> poll = pollService.findById(createPoll.getPollId());
 
         checkIfPollIsOpenToVote(poll);
         checkIfUserAlreadyHasVotedForPoll(user, poll);
         
-        Vote vote = new Vote(poll.get(), user.get(), pollVote.getVote());
+        Vote vote = new Vote(poll.get(), user.get(), createPoll.getVote());
 
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
     }
 
-    public Optional<PollResultDto> getPollResult(Integer topicId) {
-        Optional<Poll> poll = pollService.findByTopic(topicId);
+    public Optional<PollResultDto> getPollResult(Integer pollId) {
+        Optional<Poll> poll = pollService.findById(pollId);
 
         Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
         Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);

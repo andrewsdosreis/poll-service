@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Topic;
 import com.sicredi.pollservice.exception.TopicAlreadyExistsException;
 import com.sicredi.pollservice.exception.TopicNotFoundException;
-import com.sicredi.pollservice.model.request.CreateTopic;
+import com.sicredi.pollservice.model.request.CreateTopicDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.repository.TopicRepository;
 
@@ -56,7 +56,7 @@ public class TopicServiceTests {
 
     @Test
     public void test_create_isValid() {
-        CreateTopic newTopic = new CreateTopic("Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
+        CreateTopicDto newTopic = new CreateTopicDto("Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         TopicDto topicDto = new TopicDto(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         
@@ -71,7 +71,7 @@ public class TopicServiceTests {
 
     @Test
     public void test_create_AlreadyExistsException() {
-        CreateTopic newTopic = new CreateTopic("Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
+        CreateTopicDto newTopic = new CreateTopicDto("Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         
         when(topicRepository.findByName(Mockito.anyString())).thenReturn(Optional.ofNullable(topic));
