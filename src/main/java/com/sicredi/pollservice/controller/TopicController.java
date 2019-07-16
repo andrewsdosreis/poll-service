@@ -1,7 +1,7 @@
 package com.sicredi.pollservice.controller;
 
 import com.sicredi.pollservice.entity.Topic;
-import com.sicredi.pollservice.model.request.CreateTopic;
+import com.sicredi.pollservice.model.request.CreateTopicDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.service.TopicService;
 
@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(path = "/v1/topic")
+@Api(value = "Topics")
 public class TopicController extends BaseController {
 
     private TopicService topicService;
@@ -26,13 +32,19 @@ public class TopicController extends BaseController {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Find a Topic by id")
+    @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<Topic> findById(@PathVariable Integer id) {
         return topicService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()
-    public ResponseEntity<TopicDto> insert(@RequestBody CreateTopic newTopic) {
-        return topicService.create(newTopic).map(obj -> this.created(obj))
+    @ApiOperation(value = "Create a new Topic")
+    @ApiResponses({ @ApiResponse(code = 201, message = "Created"), @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
+    public ResponseEntity<TopicDto> create(@RequestBody CreateTopicDto createTopic) {
+        return topicService.create(createTopic).map(obj -> this.created(obj))
                 .orElseGet(() -> this.expectationFailed(null));
     }
 

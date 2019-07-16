@@ -1,6 +1,6 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.model.request.PollVote;
+import com.sicredi.pollservice.model.request.CreateVoteDto;
 import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.service.VoteService;
 
@@ -13,8 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(path = "/v1/vote")
+@Api(value = "Votes")
 public class VoteController extends BaseController {
 
     private VoteService voteService;
@@ -25,13 +31,20 @@ public class VoteController extends BaseController {
     }
 
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Find a Vote by id")
+    @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<VoteDto> findById(@PathVariable Integer id) {
         return voteService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()
-    public ResponseEntity<VoteDto> create(@RequestBody PollVote pollVote) {
-        return voteService.create(pollVote).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
+    @ApiOperation(value = "Register an User's Vote for a Poll")
+    @ApiResponses({ @ApiResponse(code = 201, message = "Created"), @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
+    public ResponseEntity<VoteDto> create(@RequestBody CreateVoteDto pollVote) {
+        return voteService.create(pollVote).map(obj -> this.created(obj)).orElseGet(() -> this.noContent());
     }
 
 }
