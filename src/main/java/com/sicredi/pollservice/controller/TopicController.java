@@ -1,5 +1,7 @@
 package com.sicredi.pollservice.controller;
 
+import java.util.List;
+
 import com.sicredi.pollservice.model.request.CreateTopicDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.service.TopicService;
@@ -28,6 +30,14 @@ public class TopicController extends BaseController {
     @Autowired
     public TopicController(TopicService topicService) {
         this.topicService = topicService;
+    }
+
+    @GetMapping()
+    @ApiOperation(value = "List all Topics")
+    @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Internal Server Error") })
+    public ResponseEntity<List<TopicDto>> list() {
+        return topicService.list().map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @GetMapping(value = "/{id}")

@@ -1,6 +1,8 @@
 package com.sicredi.pollservice.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Topic;
@@ -23,6 +25,12 @@ public class TopicService {
     public TopicService(ObjectMapper mapper, TopicRepository topicRepository) {
         this.mapper = mapper;
         this.topicRepository = topicRepository;
+    }
+
+    public Optional<List<TopicDto>> list() {
+        List<Topic> list = topicRepository.findAll();
+        return Optional.ofNullable(
+                list.stream().map(topic -> mapper.convertValue(topic, TopicDto.class)).collect(Collectors.toList()));
     }
 
     public Optional<TopicDto> find(Integer id) {
@@ -54,5 +62,4 @@ public class TopicService {
             throw new TopicNotFoundException(id);
         }
     }
-
 }
