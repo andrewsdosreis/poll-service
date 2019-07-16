@@ -26,7 +26,7 @@ public class TopicService {
     }
 
     public Optional<TopicDto> find(Integer id) {
-        return Optional.ofNullable(mapper.convertValue(findById(id), TopicDto.class));
+        return Optional.ofNullable(mapper.convertValue(findById(id).get(), TopicDto.class));
     }
 
     public Optional<Topic> findById(Integer id) {

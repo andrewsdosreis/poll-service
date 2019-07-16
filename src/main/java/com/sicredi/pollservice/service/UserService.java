@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public Optional<UserDto> find(Integer id) {
-        return Optional.of(mapper.convertValue(findById(id), UserDto.class));
+        return Optional.ofNullable(mapper.convertValue(findById(id).get(), UserDto.class));
     }
 
     public Optional<User> findById(Integer id) {

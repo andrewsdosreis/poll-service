@@ -36,6 +36,29 @@ public class TopicServiceTests {
     }
 
     @Test
+    public void test_find_isValid() {
+        TopicDto topicDto = new TopicDto(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
+        Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
+        
+        when(topicRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
+        when(mapper.convertValue(topic, TopicDto.class)).thenReturn(topicDto);
+
+        Optional<TopicDto> result = topicService.find(1);
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    public void test_find_NotFoundException() {     
+        when(topicRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(null));
+
+        try {
+            topicService.findById(1);
+        } catch(TopicNotFoundException e) {
+            assertNotNull(e);
+        }
+    }
+
+    @Test
     public void test_findById_isValid() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         when(topicRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
