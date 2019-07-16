@@ -37,4 +37,9 @@ public class UserDto implements Serializable {
         return cpf;
     }
 
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", cpf=" + cpf + ", name=" + name + "]";
+    }
+
 }

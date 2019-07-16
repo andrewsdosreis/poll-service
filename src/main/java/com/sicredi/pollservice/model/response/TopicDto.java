@@ -32,4 +32,8 @@ public class TopicDto implements Serializable {
         return description;
     }
 
+    @Override
+    public String toString() {
+        return "Topic [id=" + id + ", description=" + description + ", name=" + name + "]";
+    }
 }

@@ -49,4 +49,9 @@ public class VoteDto implements Serializable {
         return vote;
     }
 
+    @Override
+    public String toString() {
+        return "Vote [id=" + id + ", poll=" + poll.getId() + ", topic=" + poll.getTopic().getName() + ", user=" + user.getCpf() + ", vote=" + vote + "]";
+    }
+
 }

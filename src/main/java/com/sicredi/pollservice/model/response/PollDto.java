@@ -44,4 +44,9 @@ public class PollDto implements Serializable {
         return endDate;
     }
 
+    @Override
+    public String toString() {
+        return "Poll [, id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", topic=" + topic.getName() + "]";
+    }
+
 }

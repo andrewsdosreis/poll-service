@@ -5,13 +5,13 @@ public class PollResultDto {
     private Integer totalVotes;
     private Integer yesVotes;
     private Integer noVotes;
-    private String result;
+    private String winningOption;
 
-    public PollResultDto(Integer totalVotes, Integer yesVotes, Integer noVotes, String result) {
+    public PollResultDto(Integer totalVotes, Integer yesVotes, Integer noVotes, String winningOption) {
         this.totalVotes = totalVotes;
         this.yesVotes = yesVotes;
         this.noVotes = noVotes;
-        this.result = result;
+        this.winningOption = winningOption;
     }
 
     public Integer getTotalVotes() {
@@ -38,12 +38,18 @@ public class PollResultDto {
         this.noVotes = noVotes;
     }
 
-    public String getResult() {
-        return result;
+    public String getWinningOption() {
+        return winningOption;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setResult(String winningOption) {
+        this.winningOption = winningOption;
+    }
+
+    @Override
+    public String toString() {
+        return "PollResult [noVotes=" + noVotes + ", winningOption=" + winningOption + ", totalVotes=" + totalVotes + ", yesVotes="
+                + yesVotes + "]";
     }
 
 }

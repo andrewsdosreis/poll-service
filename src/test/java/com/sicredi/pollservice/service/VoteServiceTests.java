@@ -118,6 +118,6 @@ public class VoteServiceTests {
         assertTrue(result.get().getYesVotes().equals(5));
         assertTrue(result.get().getNoVotes().equals(5));
         assertTrue(result.get().getTotalVotes().equals(10));
-        assertEquals(result.get().getResult(), "DRAW");        
+        assertEquals(result.get().getWinningOption(), "DRAW");
     }
 }
