@@ -25,6 +25,10 @@ public class TopicService {
         this.topicRepository = topicRepository;
     }
 
+    public Optional<TopicDto> find(Integer id) {
+        return Optional.ofNullable(mapper.convertValue(findById(id), TopicDto.class));
+    }
+
     public Optional<Topic> findById(Integer id) {
         Optional<Topic> topic = topicRepository.findById(id);
         checkIfTopicNotFound(topic, id);
