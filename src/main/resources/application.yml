@@ -3,7 +3,6 @@ spring:
         name: poll-service
     datasource:
         url: 'jdbc:mysql://b7c4fd1baa2b7b:f703c6fc@us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC'
-        # url: 'jdbc:mysql://localhost:3306/poll?reconnect=true&useTimezone=true&serverTimezone=UTC'
         driverClassName: com.mysql.jdbc.Driver
         password: root
         username: root
@@ -12,6 +11,16 @@ spring:
             use-new-id-generator-mappings: false
         properties:
             hibernate: {dialect: org.hibernate.dialect.MySQL5InnoDBDialect}
+    rabbitmq:
+        host: buck.rmq.cloudamqp.com
+        port: 5672
+        virtual-host: xgpesumw
+        username: xgpesumw
+        password: 4IOdCr2OUjb6d6asNxERxMHVhUX22MBj
+
+rabbitmq:
+    PollResult:
+        exchange: PollResult.exchange
 
 logging:
   file: logs/poll-service.log

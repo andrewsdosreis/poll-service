@@ -1,17 +1,64 @@
 package com.sicredi.pollservice.model.response;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PollResultDto {
 
+    private Integer pollId;
+    private String topicName;
+    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private LocalDateTime startDate;
+    @JsonFormat(pattern="yyyy-MM-dd@HH:mm:ss.SSSZ")
+    private LocalDateTime endDate;
     private Integer totalVotes;
     private Integer yesVotes;
     private Integer noVotes;
     private String winningOption;
 
-    public PollResultDto(Integer totalVotes, Integer yesVotes, Integer noVotes, String winningOption) {
+    public PollResultDto(Integer pollId, String topicName, LocalDateTime startDate, LocalDateTime endDate,
+            Integer totalVotes, Integer yesVotes, Integer noVotes, String winningOption) {
+        this.pollId = pollId;
+        this.topicName = topicName;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.totalVotes = totalVotes;
         this.yesVotes = yesVotes;
         this.noVotes = noVotes;
         this.winningOption = winningOption;
+    }
+
+    public Integer getPollId() {
+        return pollId;
+    }
+
+    public void setPollId(Integer pollId) {
+        this.pollId = pollId;
+    }
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
     public Integer getTotalVotes() {
@@ -42,14 +89,15 @@ public class PollResultDto {
         return winningOption;
     }
 
-    public void setResult(String winningOption) {
+    public void setWinningOption(String winningOption) {
         this.winningOption = winningOption;
     }
 
     @Override
     public String toString() {
-        return "PollResult [noVotes=" + noVotes + ", winningOption=" + winningOption + ", totalVotes=" + totalVotes + ", yesVotes="
-                + yesVotes + "]";
+        return "PollResultDto [pollId=" + pollId + ", topicName=" + topicName + ", startDate=" + startDate
+                + ", endDate=" + endDate + ", totalVotes=" + totalVotes + ", yesVotes=" + yesVotes + ", noVotes="
+                + noVotes + " , winningOption=" + winningOption + "]";
     }
 
 }
