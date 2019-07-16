@@ -27,7 +27,7 @@ public class ResourceExceptionHandler {
 	}
 
 	@ExceptionHandler(BusinessException.class)
-	public ResponseEntity<ErrorHandler> dataIntegrity(BusinessException e, HttpServletRequest request) {
+	public ResponseEntity<ErrorHandler> businessException(BusinessException e, HttpServletRequest request) {
 		ErrorHandler err = new ErrorHandler(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
 				"Business exception", e.getMessage(), request.getRequestURI());
 		logger.error(err.toString());

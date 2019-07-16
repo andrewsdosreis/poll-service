@@ -63,7 +63,7 @@ public class ErrorHandler implements Serializable {
 
 	@Override
 	public String toString() {
-		return "StandardError [timestamp=" + timestamp + ", status=" + status + ", error=" + error + ", message="
+		return "ErrorHandler [timestamp=" + timestamp + ", status=" + status + ", error=" + error + ", message="
 				+ message + ", path=" + path + "]";
 	}
 }
