@@ -30,7 +30,7 @@ public class UserController extends BaseController {
     @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<UserDto> findById(@PathVariable Integer id) {
-        return userService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
+        return userService.find(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
 }

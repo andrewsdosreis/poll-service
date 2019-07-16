@@ -8,4 +8,7 @@ public class UserNotFoundException extends ResourceNotFoundException {
         super(String.format("User with CPF '%s' has not been found", userCpf));
     }
 
+    public UserNotFoundException(Integer userId) {
+        super(String.format("User with Id '%s' has not been found", userId));
+    }
 }

@@ -23,8 +23,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<UserDto> findById(Integer id) {
-        return Optional.ofNullable(mapper.convertValue(userRepository.findById(id), UserDto.class));
+    public Optional<UserDto> find(Integer id) {
+        return Optional.of(mapper.convertValue(findById(id), UserDto.class));
+    }
+
+    public Optional<User> findById(Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        checkIfUserNotFound(user, id);
+        return user;
     }
 
     public Optional<User> findByCpf(String cpf) {
@@ -36,6 +42,12 @@ public class UserService {
     private void checkIfUserNotFound(Optional<User> user, String cpf) {
         if (!user.isPresent()) {
             throw new UserNotFoundException(cpf);
+        }
+    }
+
+    private void checkIfUserNotFound(Optional<User> user, Integer id) {
+        if (!user.isPresent()) {
+            throw new UserNotFoundException(id);
         }
     }
 
