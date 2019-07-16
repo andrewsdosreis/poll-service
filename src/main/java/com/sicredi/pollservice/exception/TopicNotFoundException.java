@@ -1,6 +1,6 @@
 package com.sicredi.pollservice.exception;
 
-public class TopicNotFoundException extends BusinessException {
+public class TopicNotFoundException extends ResourceNotFoundException {
 
     private static final long serialVersionUID = 1L;
 

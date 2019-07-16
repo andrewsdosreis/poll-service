@@ -1,6 +1,6 @@
 package com.sicredi.pollservice.exception;
 
-public class PollNotFoundException extends BusinessException {
+public class PollNotFoundException extends ResourceNotFoundException {
 
     private static final long serialVersionUID = 1L;
 
