@@ -30,17 +30,17 @@ public class PollResultService {
         this.pollResultProducer = pollResultProducer;
     }
 
-    @Scheduled(fixedRate = 60000)
-    private void closePoll() {
-        logger.info("Begin to process the closed Polls");
-        List<Poll> pollsToClose = pollService.findRecentClosedPolls();
-        for (Poll poll : pollsToClose) {
-            Optional<PollResultDto> pollResult = voteService.getPollResult(poll.getId());
-            logger.info("Sending Poll result %s to message broker", pollResult.get().toString());
-            pollResultProducer.produce(pollResult.get());
-            poll.setClosed(true);
-            pollService.save(poll);
-            logger.info("Poll %s has been closed", poll.getId());
-        }
-    }
+    // @Scheduled(fixedRate = 3600000)
+    // private void closePoll() {
+    //     logger.info("Begin to process the closed Polls");
+    //     List<Poll> pollsToClose = pollService.findRecentClosedPolls();
+    //     for (Poll poll : pollsToClose) {
+    //         Optional<PollResultDto> pollResult = voteService.getPollResult(poll.getId());
+    //         logger.info("Sending Poll result %s to message broker", pollResult.get().toString());
+    //         pollResultProducer.produce(pollResult.get());
+    //         poll.setClosed(true);
+    //         pollService.save(poll);
+    //         logger.info("Poll %s has been closed", poll.getId());
+    //     }
+    // }
 }
