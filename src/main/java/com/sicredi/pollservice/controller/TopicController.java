@@ -1,6 +1,5 @@
 package com.sicredi.pollservice.controller;
 
-import com.sicredi.pollservice.entity.Topic;
 import com.sicredi.pollservice.model.request.CreateTopicDto;
 import com.sicredi.pollservice.model.response.TopicDto;
 import com.sicredi.pollservice.service.TopicService;
@@ -35,8 +34,8 @@ public class TopicController extends BaseController {
     @ApiOperation(value = "Find a Topic by id")
     @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error") })
-    public ResponseEntity<Topic> findById(@PathVariable Integer id) {
-        return topicService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
+    public ResponseEntity<TopicDto> findById(@PathVariable Integer id) {
+        return topicService.find(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()
