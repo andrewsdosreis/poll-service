@@ -1,18 +1,12 @@
 package com.sicredi.pollservice.model.request;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import com.sicredi.pollservice.model.VoteOption;
-
 public class CreateVoteDto {
 
     private Integer pollId;
     private String userCpf;
-    @Enumerated(EnumType.STRING)
-    private VoteOption vote;
+    private String vote;
 
-    public CreateVoteDto(Integer pollId, String userCpf, VoteOption vote) {
+    public CreateVoteDto(Integer pollId, String userCpf, String vote) {
         this.pollId = pollId;
         this.userCpf = userCpf;
         this.vote = vote;
@@ -25,8 +19,8 @@ public class CreateVoteDto {
     public String getUserCpf() {
         return userCpf;
     }
-   
-    public VoteOption getVote() {
+
+    public String getVote() {
         return vote;
     }
 

@@ -8,6 +8,7 @@ import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
 import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
+import com.sicredi.pollservice.exception.VoteOptionInvalidException;
 import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.request.CreateVoteDto;
 import com.sicredi.pollservice.model.response.PollResultDto;
@@ -35,11 +36,12 @@ public class VoteService {
     }
 
     public Optional<VoteDto> create(CreateVoteDto createPoll) {
+        VoteOption voteOption = checkIfVoteOptionIsInvalid(createPoll);
         Optional<User> user = userService.findByCpf(createPoll.getUserCpf());
         Optional<Poll> poll = pollService.findById(createPoll.getPollId());
         checkIfPollIsOpenToVote(poll.get());
-        checkIfUserAlreadyHasVotedForPoll(user.get(), poll.get());
-        Vote vote = new Vote(poll.get(), user.get(), createPoll.getVote());
+        checkIfUserAlreadyHasVotedForPoll(user.get(), poll.get());        
+        Vote vote = new Vote(poll.get(), user.get(), voteOption);
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
     }
 
@@ -75,4 +77,11 @@ public class VoteService {
         }
     }
 
+    private VoteOption checkIfVoteOptionIsInvalid(CreateVoteDto createVote) {
+        try {
+            return VoteOption.valueOf(createVote.getVote());
+        } catch (Exception e) {
+            throw new VoteOptionInvalidException(createVote.getVote());
+        }
+    }
 }

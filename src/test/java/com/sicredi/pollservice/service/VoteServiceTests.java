@@ -49,7 +49,7 @@ public class VoteServiceTests {
 
     @Test
     public void test_create_isValid() {
-        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", VoteOption.YES);
+        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
         Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
@@ -70,7 +70,7 @@ public class VoteServiceTests {
 
     @Test
     public void test_create_PollIsClosedToVoteException() {
-        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", VoteOption.YES);
+        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
         Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now());
@@ -87,7 +87,7 @@ public class VoteServiceTests {
 
     @Test
     public void test_create_UserAlreadyHasVotedForPoll() {
-        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", VoteOption.YES);
+        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
         Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1));
