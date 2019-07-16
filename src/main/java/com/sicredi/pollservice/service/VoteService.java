@@ -50,8 +50,9 @@ public class VoteService {
         Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
         Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);
         Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.NO);
-        String result = setPollResult(yesVotes, noVotes);
-        return Optional.ofNullable(new PollResultDto(totalVotes, yesVotes, noVotes, result));
+        String winningOption = setPollResult(yesVotes, noVotes);
+        PollResultDto pollResultDto = new PollResultDto(pollId, poll.get().getTopic().getName(), poll.get().getStartDate(), poll.get().getEndDate(), totalVotes, yesVotes, noVotes, winningOption);
+        return Optional.ofNullable(pollResultDto);
     }
 
     private String setPollResult(Integer yesVotes, Integer noVotes) {

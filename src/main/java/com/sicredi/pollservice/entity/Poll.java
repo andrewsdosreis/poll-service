@@ -32,23 +32,28 @@ public class Poll implements Serializable {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @Column(name = "closed")
+    private Boolean closed;
+
     public Poll() {
         super();
     }
 
-    public Poll(Integer id, Topic topic, LocalDateTime startDate, LocalDateTime endDate) {
+    public Poll(Integer id, Topic topic, LocalDateTime startDate, LocalDateTime endDate, Boolean closed) {
         super();
         this.id = id;
         this.topic = topic;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.closed = closed;
     }
 
-    public Poll(Topic topic, LocalDateTime startDate, LocalDateTime endDate) {
+    public Poll(Topic topic, LocalDateTime startDate, LocalDateTime endDate, Boolean closed) {
         super();
         this.topic = topic;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.closed = closed;
     }
 
     public Integer getId() {
@@ -81,6 +86,14 @@ public class Poll implements Serializable {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    public Boolean getClosed() {
+        return this.closed;
+    }
+    
+    public void setClosed(Boolean closed) {
+        this.closed = closed;
     }
 
     public boolean isOpen() {

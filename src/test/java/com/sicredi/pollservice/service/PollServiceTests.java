@@ -43,7 +43,7 @@ public class PollServiceTests {
     public void test_findById_isValid() {
         Poll poll = new Poll(1,
                 new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil"),
-                LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
+                LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
         when(pollRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
         Optional<Poll> result = pollService.findById(1);
         assertTrue(result.isPresent());
@@ -64,7 +64,7 @@ public class PollServiceTests {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         TopicDto topicDto = new TopicDto(1, "Você é a favor do desarmamento?",
                 "Votação sobre o desarmamento no Brasil");
-        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
+        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
         PollDto pollDto = new PollDto(1, topicDto, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
 
         when(topicService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
@@ -80,7 +80,7 @@ public class PollServiceTests {
     @Test
     public void test_create_TopicAlreadyHasAnOpenedPoll() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
-        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
+        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
 
         when(topicService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
         when(pollRepository.findByTopic_IdAndEndDateAfter(Mockito.anyInt(), Mockito.any(LocalDateTime.class)))

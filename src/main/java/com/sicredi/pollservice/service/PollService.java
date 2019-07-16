@@ -1,6 +1,7 @@
 package com.sicredi.pollservice.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,8 +9,8 @@ import com.sicredi.pollservice.context.logger.Log;
 import com.sicredi.pollservice.context.logger.Logger;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.Topic;
-import com.sicredi.pollservice.exception.TopicAlreadyHasAnOpenedPollException;
 import com.sicredi.pollservice.exception.PollNotFoundException;
+import com.sicredi.pollservice.exception.TopicAlreadyHasAnOpenedPollException;
 import com.sicredi.pollservice.model.request.CreatePollDto;
 import com.sicredi.pollservice.model.response.PollDto;
 import com.sicredi.pollservice.repository.PollRepository;
@@ -22,7 +23,7 @@ public class PollService {
 
     @Log
     private Logger logger;
-    
+
     private ObjectMapper mapper;
     private PollRepository pollRepository;
     private TopicService topicService;
@@ -44,8 +45,16 @@ public class PollService {
         Optional<Topic> topic = topicService.findById(createPoll.getTopicId());
         checkIfTopicAlreadyHasAnOpenedPoll(createPoll);
         Integer pollDurationInMinutes = setDurationInMinutes(createPoll.getDurationInMinutes());
-        Poll poll = new Poll(topic.get(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(pollDurationInMinutes));
-        return Optional.ofNullable(mapper.convertValue(pollRepository.save(poll), PollDto.class));
+        Poll poll = new Poll(topic.get(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(pollDurationInMinutes), false);
+        return Optional.ofNullable(mapper.convertValue(save(poll), PollDto.class));
+    }
+
+    public List<Poll> findRecentClosedPolls() {
+        return pollRepository.findByClosedAndEndDateBefore(false, LocalDateTime.now());
+    }
+
+    public Poll save(Poll poll) {
+        return pollRepository.save(poll);
     }
 
     private Integer setDurationInMinutes(Integer durationInMinutes) {

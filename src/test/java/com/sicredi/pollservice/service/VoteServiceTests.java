@@ -52,7 +52,7 @@ public class VoteServiceTests {
         CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
-        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
+        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
         Vote vote = new Vote(1, poll, user, VoteOption.YES);
         PollDto pollDto = mapper.convertValue(poll, PollDto.class);
         UserDto userDto = mapper.convertValue(user, UserDto.class);
@@ -73,7 +73,7 @@ public class VoteServiceTests {
         CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
-        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now());
+        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now(), false);
 
         when(userService.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
         when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
@@ -90,7 +90,7 @@ public class VoteServiceTests {
         CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
         User user = new User(1, "Andrews dos Reis", "01926679040");
-        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1));
+        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1), false);
         Vote vote = new Vote(1, poll, user, VoteOption.YES);
 
         when(userService.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
@@ -107,7 +107,7 @@ public class VoteServiceTests {
     @Test
     public void test_getPollResult_isValid() {
         Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
-        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1));
+        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
 
         when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
         when(voteRepository.countByPoll_Id(Mockito.anyInt())).thenReturn(10);
