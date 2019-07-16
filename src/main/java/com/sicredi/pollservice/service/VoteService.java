@@ -34,31 +34,29 @@ public class VoteService {
         this.userService = userService;
     }
 
-    public Optional<VoteDto> findById(Integer id) {
-        return Optional.ofNullable(mapper.convertValue(voteRepository.findById(id), VoteDto.class));
+    public Optional<VoteDto> find(Integer id) {
+        return Optional.ofNullable(mapper.convertValue(findById(id), VoteDto.class));
+    }
+
+    public Optional<Vote> findById(Integer id) {
+        return voteRepository.findById(id);
     }
 
     public Optional<VoteDto> create(CreateVoteDto createPoll) {
         Optional<User> user = userService.findByCpf(createPoll.getUserCpf());
         Optional<Poll> poll = pollService.findById(createPoll.getPollId());
-
-        checkIfPollIsOpenToVote(poll);
-        checkIfUserAlreadyHasVotedForPoll(user, poll);
-        
+        checkIfPollIsOpenToVote(poll.get());
+        checkIfUserAlreadyHasVotedForPoll(user.get(), poll.get());
         Vote vote = new Vote(poll.get(), user.get(), createPoll.getVote());
-
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
     }
 
     public Optional<PollResultDto> getPollResult(Integer pollId) {
         Optional<Poll> poll = pollService.findById(pollId);
-
         Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
         Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);
         Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.NO);
-
         String result = setPollResult(yesVotes, noVotes);
-
         return Optional.ofNullable(new PollResultDto(totalVotes, yesVotes, noVotes, result));
     }
 
@@ -72,16 +70,16 @@ public class VoteService {
         }
     }
 
-    private void checkIfPollIsOpenToVote(Optional<Poll> poll) {
-        if (!poll.get().isOpen()) {
-            throw new PollIsClosedException(poll.get().getTopic().getName());
+    private void checkIfPollIsOpenToVote(Poll poll) {
+        if (!poll.isOpen()) {
+            throw new PollIsClosedException(poll.getTopic().getName());
         }
     }
 
-    private void checkIfUserAlreadyHasVotedForPoll(Optional<User> user, Optional<Poll> poll) {
-        Optional<Vote> vote = voteRepository.findByUserAndPoll(user.get(), poll.get());
+    private void checkIfUserAlreadyHasVotedForPoll(User user, Poll poll) {
+        Optional<Vote> vote = voteRepository.findByUserAndPoll(user, poll);
         if (vote.isPresent()) {
-            throw new UserAlreadyHasVotedForPollException(user.get().getCpf(), poll.get().getTopic().getName());
+            throw new UserAlreadyHasVotedForPollException(user.getCpf(), poll.getTopic().getName());
         }
     }
 

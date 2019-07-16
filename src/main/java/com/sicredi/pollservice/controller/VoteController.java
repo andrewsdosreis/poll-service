@@ -35,7 +35,7 @@ public class VoteController extends BaseController {
     @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
             @ApiResponse(code = 500, message = "Internal Server Error") })
     public ResponseEntity<VoteDto> findById(@PathVariable Integer id) {
-        return voteService.findById(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
+        return voteService.find(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()
