@@ -6,8 +6,6 @@ import com.sicredi.pollservice.service.VoteService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +26,6 @@ public class VoteController extends BaseController {
     @Autowired
     public VoteController(VoteService voteService) {
         this.voteService = voteService;
-    }
-
-    @GetMapping(value = "/{id}")
-    @ApiOperation(value = "Find a Vote by id")
-    @ApiResponses({ @ApiResponse(code = 200, message = "OK"), @ApiResponse(code = 404, message = "Not Found"),
-            @ApiResponse(code = 500, message = "Internal Server Error") })
-    public ResponseEntity<VoteDto> findById(@PathVariable Integer id) {
-        return voteService.find(id).map(obj -> this.ok(obj)).orElseGet(() -> this.noContent());
     }
 
     @PostMapping()

@@ -34,14 +34,6 @@ public class VoteService {
         this.userService = userService;
     }
 
-    public Optional<VoteDto> find(Integer id) {
-        return Optional.ofNullable(mapper.convertValue(findById(id), VoteDto.class));
-    }
-
-    public Optional<Vote> findById(Integer id) {
-        return voteRepository.findById(id);
-    }
-
     public Optional<VoteDto> create(CreateVoteDto createPoll) {
         Optional<User> user = userService.findByCpf(createPoll.getUserCpf());
         Optional<Poll> poll = pollService.findById(createPoll.getPollId());
