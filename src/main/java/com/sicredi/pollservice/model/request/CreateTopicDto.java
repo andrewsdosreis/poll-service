@@ -2,18 +2,18 @@ package com.sicredi.pollservice.model.request;
 
 import java.io.Serializable;
 
-public class CreateTopic implements Serializable {
+public class CreateTopicDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String name;
     private String description;
 
-    public CreateTopic() {
+    public CreateTopicDto() {
         super();
     }
 
-    public CreateTopic(String name, String description) {
+    public CreateTopicDto(String name, String description) {
         super();
         this.name = name;
         this.description = description;

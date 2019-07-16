@@ -1,11 +1,11 @@
 package com.sicredi.pollservice.model.request;
 
-public class OpenPollDto {
+public class CreatePollDto {
 
     private Integer topicId;
     private Integer durationInMinutes;
 
-    public OpenPollDto(Integer topicId, Integer durationInMinutes) {
+    public CreatePollDto(Integer topicId, Integer durationInMinutes) {
         this.topicId = topicId;
         this.durationInMinutes = durationInMinutes;
     }    

@@ -5,21 +5,21 @@ import javax.persistence.Enumerated;
 
 import com.sicredi.pollservice.model.VoteOption;
 
-public class PollVote {
+public class CreateVoteDto {
 
-    private Integer topicId;
+    private Integer pollId;
     private String userCpf;
     @Enumerated(EnumType.STRING)
     private VoteOption vote;
 
-    public PollVote(Integer topicId, String userCpf, VoteOption vote) {
-        this.topicId = topicId;
+    public CreateVoteDto(Integer pollId, String userCpf, VoteOption vote) {
+        this.pollId = pollId;
         this.userCpf = userCpf;
         this.vote = vote;
     }
 
-    public Integer getTopicId() {
-        return topicId;
+    public Integer getPollId() {
+        return pollId;
     }
 
     public String getUserCpf() {
