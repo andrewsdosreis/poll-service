@@ -10,6 +10,7 @@ import com.sicredi.pollservice.context.logger.Log;
 import com.sicredi.pollservice.context.logger.Logger;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.exception.PollIsClosedException;
+import com.sicredi.pollservice.exception.PollIsOpenException;
 import com.sicredi.pollservice.exception.PollNotFoundException;
 import com.sicredi.pollservice.exception.TopicAlreadyHasAnOpenedPollException;
 import com.sicredi.pollservice.model.request.CreatePollDto;
@@ -70,6 +71,12 @@ public class PollService {
         return poll;
     }
 
+    public Optional<Poll> checkIfPollIsClosedToGetPollResults(Integer id) {
+        Optional<Poll> poll = findById(id);
+        checkIfPollIsClosedToGetPollResult(poll.get());
+        return poll;
+    }
+
     public Poll save(Poll poll) {
         return pollRepository.save(poll);
     }
@@ -97,6 +104,12 @@ public class PollService {
     private void checkIfPollIsOpenToVote(Poll poll) {
         if (!poll.isOpen()) {
             throw new PollIsClosedException(poll.getTopic().getName());
+        }
+    }
+
+    private void checkIfPollIsClosedToGetPollResult(Poll poll) {
+        if (poll.isOpen()) {
+            throw new PollIsOpenException(poll.getId(), poll.getTopic().getName());
         }
     }
 

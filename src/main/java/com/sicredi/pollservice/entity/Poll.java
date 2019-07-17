@@ -104,6 +104,10 @@ public class Poll implements Serializable {
         return this.endDate.isAfter(LocalDateTime.now());
     }
 
+    public String getTopicName() {
+        return this.getTopic().getName();
+    }
+
     public static class Builder {
 
         private Integer id;
