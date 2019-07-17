@@ -13,5 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface PollRepository extends CrudRepository<Poll, Integer> {
 
     Optional<Poll> findByTopic_IdAndEndDateAfter(Integer topicId, LocalDateTime endDate);
-    List<Poll> findByClosedAndEndDateBefore(Boolean closed, LocalDateTime endDate);
+
+    List<Poll> findAllByClosedAndEndDateBefore(Boolean closed, LocalDateTime endDate);
+
+    List<Poll> findAll();
 }
