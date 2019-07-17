@@ -112,7 +112,7 @@ Acessar a documentação Swagger do serviço
 	2. Configurei o Travis CI para executar os testes e realizar build da aplicação
 	3. Configurei o Heroku para, ao término da execução do build do Travis, realizar o deploy da aplicação no ambiente cloud
 
-![Imagem com o versionamento das API](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/images/travisCI.png)
+![Imagem com o versionamento das API](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/images/travisCi.png)
 
 ## Versionamento:
 
