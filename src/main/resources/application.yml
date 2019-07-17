@@ -2,10 +2,10 @@ spring:
     application:
         name: poll-service
     datasource:
-        url: 'jdbc:mysql://b7c4fd1baa2b7b:f703c6fc@us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC'
+        url: jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC
         driverClassName: com.mysql.jdbc.Driver
-        password: root
-        username: root
+        password: f703c6fc
+        username: b7c4fd1baa2b7b
     jpa:
         hibernate:
             use-new-id-generator-mappings: false
@@ -22,15 +22,18 @@ rabbitmq:
     PollResult:
         exchange: PollResult.exchange
 
+user-info:
+    api: https://user-info.herokuapp.com/users/
+
 logging:
-  file: logs/poll-service.log
-  pattern:
-    console: "%d %-5level %logger : %msg%n"
-    file: "%d %-5level [%thread] %logger : %msg%n"
-  level:
-    org.springframework.web: ERROR
-    com.sicredi.pollservice: DEBUG
-    org.hibernate: ERROR
+    file: logs/poll-service.log
+    pattern:
+        console: "%d %-5level %logger : %msg%n"
+        file: "%d %-5level [%thread] %logger : %msg%n"
+    level:
+        org.springframework.web: ERROR
+        com.sicredi.pollservice: DEBUG
+        org.hibernate: ERROR
 
 api:
     info:
