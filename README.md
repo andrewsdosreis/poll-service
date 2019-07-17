@@ -122,3 +122,6 @@ Acessar a documentação Swagger do serviço
 - Gostaria de ter implementado testes de performance para o endpoint que realiza o voto do associado, visto que como descrito seria um ponto de gargalo da aplicação. Algumas melhorias que poderiam ser aplicadas para garantir uma boa performance:
 	- Implementar cache usando o REDIS:
 		- Podemos implementar cache REDIS nas informações slowchange, como por exemplo a chamada REST para saber se o usuário está apto para votar, ou a validação de que um usuário JÁ REALIZOU seu voto em uma Sessão de Votação.
+
+	- Escalabilidade horizontal:
+		- Utilizando a nuvem, podemos escalar horizontalmente adicionando instâncias à aplicação conforme a demanda.
