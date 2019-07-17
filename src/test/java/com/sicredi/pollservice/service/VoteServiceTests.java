@@ -89,14 +89,6 @@ public class VoteServiceTests {
     @Test
     public void test_create_VoteOptionInvalidException() {
         CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YESSS");
-        Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
-        User user = new User(1, "Andrews dos Reis", "01926679040");
-        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1), false);
-        Vote vote = new Vote(1, poll, user, VoteOption.YES);
-
-        when(userService.checkAndReturnaValidUserToVote(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
-        when(pollService.checkAndReturnValidPollToVote(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
-        when(voteRepository.findByUserAndPoll(user, poll)).thenReturn(Optional.ofNullable(vote));
 
         try {
             voteService.create(pollVote);

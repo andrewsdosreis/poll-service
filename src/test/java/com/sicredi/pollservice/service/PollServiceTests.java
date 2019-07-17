@@ -141,7 +141,6 @@ public class PollServiceTests {
                             .setClosed(false)
                             .build();
 
-        when(topicService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(topic));
         when(pollRepository.findByTopic_IdAndEndDateAfter(Mockito.anyInt(), Mockito.any(LocalDateTime.class))).thenReturn(Optional.ofNullable(poll));
 
         try {
