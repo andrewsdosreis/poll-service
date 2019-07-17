@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PollDto implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
     private TopicDto topic;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
@@ -50,7 +50,42 @@ public class PollDto implements Serializable {
 
     @Override
     public String toString() {
-        return "Poll [, id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", topic=" + topic.getName() + "]";
+        return "Poll [, id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", topic=" + topic.getName()
+                + "]";
     }
 
+    public static class Builder {
+
+        private Integer id;
+        private TopicDto topic;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
+
+        public Builder() {
+        }
+
+        public Builder setId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTopic(TopicDto topic) {
+            this.topic = topic;
+            return this;
+        }
+
+        public Builder setStartDate(LocalDateTime startDate) {
+            this.startDate = startDate;
+            return this;
+        }
+
+        public Builder setEndDate(LocalDateTime endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        public PollDto build() {
+            return new PollDto(id, topic, startDate, endDate);
+        }
+    }
 }

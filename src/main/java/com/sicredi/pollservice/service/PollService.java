@@ -3,12 +3,13 @@ package com.sicredi.pollservice.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.context.logger.Log;
 import com.sicredi.pollservice.context.logger.Logger;
 import com.sicredi.pollservice.entity.Poll;
-import com.sicredi.pollservice.entity.Topic;
+import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.PollNotFoundException;
 import com.sicredi.pollservice.exception.TopicAlreadyHasAnOpenedPollException;
 import com.sicredi.pollservice.model.request.CreatePollDto;
@@ -35,26 +36,48 @@ public class PollService {
         this.topicService = topicService;
     }
 
-    public Optional<Poll> findById(Integer id) {
-        Optional<Poll> poll = pollRepository.findById(id);
-        checkIfPollNotFound(poll, id);
-        return poll;
+    public Optional<List<PollDto>> list() {
+        return Optional.ofNullable(pollRepository
+                                    .findAll()
+                                    .stream()
+                                    .map(poll -> mapper.convertValue(poll, PollDto.class))
+                                    .collect(Collectors.toList()));
+    }
+
+    public Optional<PollDto> find(Integer id) {
+        return Optional.ofNullable(mapper.convertValue(findById(id).get(), PollDto.class));
     }
 
     public Optional<PollDto> create(CreatePollDto createPoll) {
-        Optional<Topic> topic = topicService.findById(createPoll.getTopicId());
         checkIfTopicAlreadyHasAnOpenedPoll(createPoll);
-        Integer pollDurationInMinutes = setDurationInMinutes(createPoll.getDurationInMinutes());
-        Poll poll = new Poll(topic.get(), LocalDateTime.now(), LocalDateTime.now().plusMinutes(pollDurationInMinutes), false);
+        Poll poll = new Poll.Builder()
+                            .setTopic(topicService.findById(createPoll.getTopicId()).get())
+                            .setStartDate(LocalDateTime.now())
+                            .setEndDate(LocalDateTime.now().plusMinutes(setDurationInMinutes(createPoll.getDurationInMinutes())))
+                            .setClosed(false)
+                            .build();
+        
         return Optional.ofNullable(mapper.convertValue(save(poll), PollDto.class));
     }
 
-    public List<Poll> findRecentClosedPolls() {
-        return pollRepository.findByClosedAndEndDateBefore(false, LocalDateTime.now());
+    public List<Poll> listAllRecentlyClosedPolls() {
+        return pollRepository.findAllByClosedAndEndDateBefore(false, LocalDateTime.now());
+    }
+
+    public Optional<Poll> checkAndReturnValidPollToVote(Integer id) {
+        Optional<Poll> poll = findById(id);
+        checkIfPollIsOpenToVote(poll.get());
+        return poll;
     }
 
     public Poll save(Poll poll) {
         return pollRepository.save(poll);
+    }
+
+    private Optional<Poll> findById(Integer id) {
+        Optional<Poll> poll = pollRepository.findById(id);
+        checkIfPollNotFound(poll, id);
+        return poll;
     }
 
     private Integer setDurationInMinutes(Integer durationInMinutes) {
@@ -71,11 +94,16 @@ public class PollService {
         }
     }
 
+    private void checkIfPollIsOpenToVote(Poll poll) {
+        if (!poll.isOpen()) {
+            throw new PollIsClosedException(poll.getTopic().getName());
+        }
+    }
+
     private void checkIfTopicAlreadyHasAnOpenedPoll(CreatePollDto createPoll) {
         Optional<Poll> poll = pollRepository.findByTopic_IdAndEndDateAfter(createPoll.getTopicId(), LocalDateTime.now());
         if (poll.isPresent()) {
             throw new TopicAlreadyHasAnOpenedPollException(poll.get().getTopic().getName());
         }
     }
-
 }

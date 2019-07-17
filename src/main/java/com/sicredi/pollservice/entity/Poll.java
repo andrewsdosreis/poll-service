@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "poll", schema = "poll")
 public class Poll implements Serializable {
@@ -27,9 +29,11 @@ public class Poll implements Serializable {
     private Topic topic;
 
     @Column(name = "start_date")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime startDate;
 
     @Column(name = "end_date")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime endDate;
 
     @Column(name = "closed")
@@ -91,7 +95,7 @@ public class Poll implements Serializable {
     public Boolean getClosed() {
         return this.closed;
     }
-    
+
     public void setClosed(Boolean closed) {
         this.closed = closed;
     }
@@ -99,5 +103,45 @@ public class Poll implements Serializable {
     public boolean isOpen() {
         return this.endDate.isAfter(LocalDateTime.now());
     }
-    
+
+    public static class Builder {
+
+        private Integer id;
+        private Topic topic;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
+        private Boolean closed;
+
+        public Builder setId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setTopic(Topic topic) {
+            this.topic = topic;
+            return this;
+        }
+
+        public Builder setStartDate(LocalDateTime startDate) {
+            this.startDate = startDate;
+            return this;
+        }
+
+        public Builder setEndDate(LocalDateTime endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        public Builder setClosed(Boolean closed) {
+            this.closed = closed;
+            return this;
+        }
+
+        public Builder() {
+        }
+
+        public Poll build() {
+            return new Poll(id, topic, startDate, endDate, closed);
+        }
+    }
 }
