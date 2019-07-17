@@ -36,5 +36,4 @@ public class VoteController extends BaseController {
     public ResponseEntity<VoteDto> create(@RequestBody CreateVoteDto pollVote) {
         return voteService.create(pollVote).map(obj -> this.created(obj)).orElseGet(() -> this.noContent());
     }
-
 }

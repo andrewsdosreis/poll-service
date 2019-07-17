@@ -13,12 +13,11 @@ import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.Topic;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
-import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
+import com.sicredi.pollservice.exception.VoteOptionInvalidException;
 import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.request.CreateVoteDto;
 import com.sicredi.pollservice.model.response.PollDto;
-import com.sicredi.pollservice.model.response.PollResultDto;
 import com.sicredi.pollservice.model.response.UserDto;
 import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.repository.VoteRepository;
@@ -58,31 +57,14 @@ public class VoteServiceTests {
         UserDto userDto = mapper.convertValue(user, UserDto.class);
         VoteDto voteDto = new VoteDto(1, pollDto, userDto, VoteOption.YES);
 
-        when(userService.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
-        when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
+        when(userService.checkAndReturnaValidUserToVote(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
+        when(pollService.checkAndReturnValidPollToVote(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
         when(voteRepository.findByUserAndPoll(user, poll)).thenReturn(Optional.ofNullable(null));
         when(voteRepository.save(Mockito.any(Vote.class))).thenReturn(vote);
         when(mapper.convertValue(vote, VoteDto.class)).thenReturn(voteDto);
 
         Optional<VoteDto> result = voteService.create(pollVote);
         assertTrue(result.isPresent());
-    }
-
-    @Test
-    public void test_create_PollIsClosedToVoteException() {
-        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YES");
-        Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
-        User user = new User(1, "Andrews dos Reis", "01926679040");
-        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now(), false);
-
-        when(userService.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
-        when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
-
-        try {
-            voteService.create(pollVote);
-        } catch (PollIsClosedException e) {
-            assertNotNull(e);
-        }
     }
 
     @Test
@@ -93,8 +75,8 @@ public class VoteServiceTests {
         Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1), false);
         Vote vote = new Vote(1, poll, user, VoteOption.YES);
 
-        when(userService.findByCpf(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
-        when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
+        when(userService.checkAndReturnaValidUserToVote(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
+        when(pollService.checkAndReturnValidPollToVote(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
         when(voteRepository.findByUserAndPoll(user, poll)).thenReturn(Optional.ofNullable(vote));
 
         try {
@@ -103,21 +85,47 @@ public class VoteServiceTests {
             assertNotNull(e);
         }
     }
+    
+    @Test
+    public void test_create_VoteOptionInvalidException() {
+        CreateVoteDto pollVote = new CreateVoteDto(1, "01926679040", "YESSS");
+        Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
+        User user = new User(1, "Andrews dos Reis", "01926679040");
+        Poll poll = new Poll(1, topic, LocalDateTime.now().minusMinutes(10), LocalDateTime.now().plusMinutes(1), false);
+        Vote vote = new Vote(1, poll, user, VoteOption.YES);
+
+        when(userService.checkAndReturnaValidUserToVote(Mockito.anyString())).thenReturn(Optional.ofNullable(user));
+        when(pollService.checkAndReturnValidPollToVote(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
+        when(voteRepository.findByUserAndPoll(user, poll)).thenReturn(Optional.ofNullable(vote));
+
+        try {
+            voteService.create(pollVote);
+        } catch (VoteOptionInvalidException e) {
+            assertNotNull(e);
+        }
+    }
 
     @Test
-    public void test_getPollResult_isValid() {
-        Topic topic = new Topic(1, "Você é a favor do desarmamento?", "Votação sobre o desarmamento no Brasil");
-        Poll poll = new Poll(1, topic, LocalDateTime.now(), LocalDateTime.now().plusMinutes(1), false);
+    public void test_countVotesByPoll_isValid() {
+        Integer totalVotes = 100;
+        when(voteRepository.countByPoll_Id(Mockito.anyInt())).thenReturn(totalVotes);
+        Integer result = voteService.countVotesByPoll(1);
+        assertEquals(result, totalVotes);
+    }
 
-        when(pollService.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(poll));
-        when(voteRepository.countByPoll_Id(Mockito.anyInt())).thenReturn(10);
-        when(voteRepository.countByPoll_IdAndVote(Mockito.anyInt(), Mockito.any(VoteOption.class))).thenReturn(5);
+    @Test
+    public void test_countVotesByPollAndVoteOption_YES_isValid() {
+        Integer yesVotes = 60;
+        when(voteRepository.countByPoll_IdAndVote(Mockito.anyInt(), Mockito.any(VoteOption.class))).thenReturn(yesVotes);
+        Integer result = voteService.countVotesByPollAndVoteOption(1, VoteOption.YES);
+        assertEquals(result, yesVotes);
+    }
 
-        Optional<PollResultDto> result = voteService.getPollResult(1);
-        assertTrue(result.isPresent());
-        assertTrue(result.get().getYesVotes().equals(5));
-        assertTrue(result.get().getNoVotes().equals(5));
-        assertTrue(result.get().getTotalVotes().equals(10));
-        assertEquals(result.get().getWinningOption(), "DRAW");
+    @Test
+    public void test_countVotesByPollAndVoteOption_NO_isValid() {
+        Integer noVotes = 40;
+        when(voteRepository.countByPoll_IdAndVote(Mockito.anyInt(), Mockito.any(VoteOption.class))).thenReturn(noVotes);
+        Integer result = voteService.countVotesByPollAndVoteOption(1, VoteOption.NO);
+        assertEquals(result, noVotes);
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface VoteRepository extends CrudRepository<Vote, Integer> {
 
     Optional<Vote> findByUserAndPoll(User user, Poll poll);
+
     Integer countByPoll_Id(Integer pollId);
+
     Integer countByPoll_IdAndVote(Integer pollId, VoteOption vote);
 }

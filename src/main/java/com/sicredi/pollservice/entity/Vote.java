@@ -88,4 +88,38 @@ public class Vote implements Serializable {
         this.vote = vote;
     }
 
+    public static class Builder {
+
+        private Integer id;
+        private Poll poll;
+        private User user;
+        private VoteOption vote;
+
+        public Builder() {
+        }
+
+        public Builder setId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setPoll(Poll poll) {
+            this.poll = poll;
+            return this;
+        }
+
+        public Builder setUser(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder setVote(VoteOption vote) {
+            this.vote = vote;
+            return this;
+        }
+        
+        public Vote build() {
+            return new Vote(id, poll, user, vote);
+        }
+    }
 }

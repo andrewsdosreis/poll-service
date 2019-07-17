@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.entity.User;
 import com.sicredi.pollservice.entity.Vote;
-import com.sicredi.pollservice.exception.PollIsClosedException;
 import com.sicredi.pollservice.exception.UserAlreadyHasVotedForPollException;
 import com.sicredi.pollservice.exception.VoteOptionInvalidException;
 import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.request.CreateVoteDto;
-import com.sicredi.pollservice.model.response.PollResultDto;
 import com.sicredi.pollservice.model.response.VoteDto;
 import com.sicredi.pollservice.repository.VoteRepository;
 
@@ -35,40 +33,24 @@ public class VoteService {
         this.userService = userService;
     }
 
-    public Optional<VoteDto> create(CreateVoteDto createPoll) {
-        VoteOption voteOption = checkIfVoteOptionIsInvalid(createPoll);
-        Optional<User> user = userService.findByCpf(createPoll.getUserCpf());
-        Optional<Poll> poll = pollService.findById(createPoll.getPollId());
-        checkIfPollIsOpenToVote(poll.get());
-        checkIfUserAlreadyHasVotedForPoll(user.get(), poll.get());        
-        Vote vote = new Vote(poll.get(), user.get(), voteOption);
+    public Optional<VoteDto> create(CreateVoteDto createVote) {
+        Vote vote = new Vote.Builder()
+                            .setVote(checkIfVoteOptionIsInvalid(createVote))
+                            .setUser(userService.checkAndReturnaValidUserToVote(createVote.getUserCpf()).get())
+                            .setPoll(pollService.checkAndReturnValidPollToVote(createVote.getPollId()).get())
+                            .build();
+
+        checkIfUserAlreadyHasVotedForPoll(vote.getUser(), vote.getPoll());
+
         return Optional.ofNullable(mapper.convertValue(voteRepository.save(vote), VoteDto.class));
     }
 
-    public Optional<PollResultDto> getPollResult(Integer pollId) {
-        Optional<Poll> poll = pollService.findById(pollId);
-        Integer totalVotes = voteRepository.countByPoll_Id(poll.get().getId());
-        Integer yesVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.YES);
-        Integer noVotes = voteRepository.countByPoll_IdAndVote(poll.get().getId(), VoteOption.NO);
-        String winningOption = setPollResult(yesVotes, noVotes);
-        PollResultDto pollResultDto = new PollResultDto(pollId, poll.get().getTopic().getName(), poll.get().getStartDate(), poll.get().getEndDate(), totalVotes, yesVotes, noVotes, winningOption);
-        return Optional.ofNullable(pollResultDto);
+    public Integer countVotesByPoll(Integer pollId) {
+        return voteRepository.countByPoll_Id(pollId);
     }
 
-    private String setPollResult(Integer yesVotes, Integer noVotes) {
-        if (yesVotes > noVotes) {
-            return "YES";
-        } else if (yesVotes < noVotes) {
-            return "NO";
-        } else {
-            return "DRAW";
-        }
-    }
-
-    private void checkIfPollIsOpenToVote(Poll poll) {
-        if (!poll.isOpen()) {
-            throw new PollIsClosedException(poll.getTopic().getName());
-        }
+    public Integer countVotesByPollAndVoteOption(Integer pollId, VoteOption voteOption) {
+        return voteRepository.countByPoll_IdAndVote(pollId, voteOption);
     }
 
     private void checkIfUserAlreadyHasVotedForPoll(User user, Poll poll) {
