@@ -47,9 +47,8 @@ public class PollResultService {
         return Optional.ofNullable(pollResult);
     }
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 60000)
     private void sendPollResultToMessageBroker() {
-        logger.info("Begin to process the closed Polls");
         List<Poll> pollsToClose = pollService.listAllRecentlyClosedPolls();
         for (Poll poll : pollsToClose) {
             Optional<PollResultDto> pollResult = getPollResult(poll.getId());
