@@ -13,17 +13,19 @@ Ao executar a aplicação localmente, a mesma irá:
 - Conectar com MySQL que está disponível na nuvem
 - Conectar com RabbitMQ que está disponível na nuvem
 
+Para acessar local: http://localhost:8080
+
 A aplicação também está publicada na nuvem, pode ser executada diretamente.
 
 ## Endereços:
 
 - Poll-Service:
-	https://poll-service.herokuapp.com/
+	- https://poll-service.herokuapp.com/
 
 - RabbitMQ:
-	https://buck.rmq.cloudamqp.com/
-	user: xgpesumw
-	pass: 4IOdCr2OUjb6d6asNxERxMHVhUX22MBj
+	- https://buck.rmq.cloudamqp.com/
+	- user: xgpesumw
+	- pass: 4IOdCr2OUjb6d6asNxERxMHVhUX22MBj
 
 ## Como usar o serviço
 
@@ -95,10 +97,11 @@ Acessar a documentação Swagger do serviço
 
 
 - O código foi escrito em inglês, seguindo a linha abaixo:
-	Topic  	-> Pauta
-	Poll	-> Sessão de Votação
-	Vote	-> Voto
-	User	-> Usuários/associados
+	- Topic -> Pauta
+	- Poll	-> Sessão de Votação
+	- Vote	-> Voto
+	- User	-> Usuários/associados
+  
   Por mais que o código fique mais elegante, tenho minhas dúvidas quanto a desenvolver totalmente em inglês. Sempre penso sobre o DDD, de Eric Evans, e o que mais gosto de todo o livro: a Ubiquitous Language.
   Será que, ao desenvolver totalmente em inglês, não estamos nos afastando dos termos tão conhecidos pelo nosso negócio?
   Em soluções menores, como esta, não vejo problemas. Porém, com um ambiente mais complexo, poderiamos gerar alguns ruídos de comunicação. Acredito que, como tudo, temos pontos positivos e negativos.

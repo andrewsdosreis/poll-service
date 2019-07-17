@@ -2,10 +2,15 @@ spring:
     application:
         name: poll-service
     datasource:
-        url: jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC-3
+        url: jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC
         driverClassName: com.mysql.jdbc.Driver
         password: f703c6fc
         username: b7c4fd1baa2b7b
+        type: com.zaxxer.hikari.HikariDataSource
+        hikari:
+            maximum-pool-size: 3
+            minimum-idle: 1
+            connection-test-query: 'SELECT 1'
     jpa:
         hibernate:
             use-new-id-generator-mappings: false
