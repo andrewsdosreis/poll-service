@@ -104,7 +104,9 @@ public class PollResultDto {
 
         private Integer pollId;
         private String topicName;
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
         private LocalDateTime startDate;
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
         private LocalDateTime endDate;
         private Integer totalVotes;
         private Integer yesVotes;

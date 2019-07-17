@@ -62,7 +62,9 @@ public class PollDto implements Serializable {
 
         private Integer id;
         private TopicDto topic;
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
         private LocalDateTime startDate;
+        @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
         private LocalDateTime endDate;
 
         public Builder() {
