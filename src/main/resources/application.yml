@@ -2,7 +2,7 @@ spring:
     application:
         name: poll-service
     datasource:
-        url: jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC
+        url: jdbc:mysql://us-cdbr-iron-east-02.cleardb.net/heroku_3734305ebe3b61f?reconnect=true&useTimezone=true&serverTimezone=UTC-3
         driverClassName: com.mysql.jdbc.Driver
         password: f703c6fc
         username: b7c4fd1baa2b7b
