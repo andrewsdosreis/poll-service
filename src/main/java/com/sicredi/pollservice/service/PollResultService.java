@@ -7,6 +7,7 @@ import com.sicredi.pollservice.context.logger.Log;
 import com.sicredi.pollservice.context.logger.Logger;
 import com.sicredi.pollservice.entity.Poll;
 import com.sicredi.pollservice.messagebroker.producer.PollResultProducer;
+import com.sicredi.pollservice.model.VoteOption;
 import com.sicredi.pollservice.model.response.PollResultDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +31,33 @@ public class PollResultService {
         this.pollResultProducer = pollResultProducer;
     }
 
-    // @Scheduled(fixedRate = 3600000)
-    // private void closePoll() {
-    //     logger.info("Begin to process the closed Polls");
-    //     List<Poll> pollsToClose = pollService.findRecentClosedPolls();
-    //     for (Poll poll : pollsToClose) {
-    //         Optional<PollResultDto> pollResult = voteService.getPollResult(poll.getId());
-    //         logger.info("Sending Poll result %s to message broker", pollResult.get().toString());
-    //         pollResultProducer.produce(pollResult.get());
-    //         poll.setClosed(true);
-    //         pollService.save(poll);
-    //         logger.info("Poll %s has been closed", poll.getId());
-    //     }
-    // }
+    public Optional<PollResultDto> getPollResult(Integer pollId) {
+        Optional<Poll> poll = pollService.checkIfPollIsClosedToGetPollResults(pollId);
+        PollResultDto pollResult = new PollResultDto.Builder()
+                                                    .setPollId(pollId)
+                                                    .setTopicName(poll.get().getTopicName())
+                                                    .setStartDate(poll.get().getStartDate())
+                                                    .setEndDate(poll.get().getEndDate())
+                                                    .setTotalVotes(voteService.countVotesByPoll(pollId))
+                                                    .setYesVotes(voteService.countVotesByPollAndVoteOption(pollId, VoteOption.YES))
+                                                    .setNoVotes(voteService.countVotesByPollAndVoteOption(pollId, VoteOption.NO))
+                                                    .setWinningOption()
+                                                    .build();
+
+        return Optional.ofNullable(pollResult);
+    }
+
+    @Scheduled(fixedRate = 30000)
+    private void sendPollResultToMessageBroker() {
+        logger.info("Begin to process the closed Polls");
+        List<Poll> pollsToClose = pollService.listAllRecentlyClosedPolls();
+        for (Poll poll : pollsToClose) {
+            Optional<PollResultDto> pollResult = getPollResult(poll.getId());
+            logger.info("Sending Poll result %s to message broker", pollResult.get().toString());
+            pollResultProducer.produce(pollResult.get());
+            poll.setClosed(true);
+            pollService.save(poll);
+            logger.info("Poll %s has been closed", poll.getId());
+        }
+    }
 }

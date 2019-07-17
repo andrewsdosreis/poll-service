@@ -100,4 +100,69 @@ public class PollResultDto {
                 + noVotes + " , winningOption=" + winningOption + "]";
     }
 
+    public static class Builder {
+
+        private Integer pollId;
+        private String topicName;
+        private LocalDateTime startDate;
+        private LocalDateTime endDate;
+        private Integer totalVotes;
+        private Integer yesVotes;
+        private Integer noVotes;
+        private String winningOption;
+
+        public Builder() {
+        }
+
+        public Builder setPollId(Integer pollId) {
+            this.pollId = pollId;
+            return this;
+        }
+
+        public Builder setTopicName(String topicName) {
+            this.topicName = topicName;
+            return this;
+        }
+
+        public Builder setStartDate(LocalDateTime startDate) {
+            this.startDate = startDate;
+            return this;
+        }
+
+        public Builder setEndDate(LocalDateTime endDate) {
+            this.endDate = endDate;
+            return this;
+        }
+
+        public Builder setTotalVotes(Integer totalVotes) {
+            this.totalVotes = totalVotes;
+            return this;
+        }
+
+        public Builder setYesVotes(Integer yesVotes) {
+            this.yesVotes = yesVotes;
+            return this;
+        }
+
+        public Builder setNoVotes(Integer noVotes) {
+            this.noVotes = noVotes;
+            return this;
+        }
+
+        public Builder setWinningOption() {
+            if (this.yesVotes > this.noVotes) {
+                this.winningOption = "YES";
+            } else if (this.yesVotes < this.noVotes) {
+                this.winningOption = "NO";
+            } else {
+                this.winningOption = "DRAW";
+            }
+            return this;
+        }
+
+        public PollResultDto build() {
+            return new PollResultDto(pollId, topicName, startDate, endDate, totalVotes, yesVotes, noVotes, winningOption);
+        }
+    }
+
 }
