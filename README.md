@@ -84,17 +84,13 @@ Acessar a documentação Swagger do serviço
 
 - Java e Spring Boot, por ser a stack que mais domino e pela facilidade da injeção de dependências
 
-
 - Banco de dados relacional, MySQL
-
 
 - Mensageria com RabbitMQ, pela familiaridade e pela simplicidade para subir e configurar na nuvem.
   Também levei em conta nesta escolha o fato de que a mensagem com o resultado da Votação é algo simples, que um MessageBroker como o rabbitMQ atende plenamente.
   Caso seja necessário enviar a mensagem para outros sistemas, podemos utilizar o poder de coreografia do rabbitMQ adicionando mais filas ao EXCHANGE que recebe a escrita da mensagem.
 
-
 - A camada de negócio conta com testes de unidade que são executados a cada PUSH/PR na branch master do github
-
 
 - O código foi escrito em inglês, seguindo a linha abaixo:
 	- Topic -> Pauta
@@ -106,23 +102,23 @@ Acessar a documentação Swagger do serviço
   Será que, ao desenvolver totalmente em inglês, não estamos nos afastando dos termos tão conhecidos pelo nosso negócio?
   Em soluções menores, como esta, não vejo problemas. Porém, com um ambiente mais complexo, poderiamos gerar alguns ruídos de comunicação. Acredito que, como tudo, temos pontos positivos e negativos.
 
-
 - Montei um pipeline de publicação que funciona da seguinte forma:
 	1. Realizo um push/PR na branch master do repositório do GitHub
 	2. Configurei o Travis CI para executar os testes e realizar build da aplicação
 	3. Configurei o Heroku para, ao término da execução do build do Travis, realizar o deploy da aplicação no ambiente cloud
 
-![Imagem com o versionamento das API](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/images/travisCi.png)
+![Imagem com o builds do TravisCI](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/images/travisCi.png)
 
 ## Versionamento:
 
-- Optei por adicionar na URI o versionamento para as API:
+- Optei por adicionar na URI o versionamento para as API, adotando a estratégia de colocar "v1" a frente
+
 ![Imagem com o versionamento das API](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/images/api_version.png)
 
 ## Melhorias:
 
 - O log está sendo gravado numa pasta /logs na raiz da aplicação. Uma melhoria seria implementar um FileBeats para coletar o texto e enviar para um ambiente usando a tecnologia ELK
 
-- Gostaria de ter implementado testes de performance para o endpoint que realiza o voto do associado, visto que como descrito seria um ponto de gargalo da aplicação.
-  Algumas melhorias que poderiam ser aplicadas para garantir uma boa performance, como  implementar cache usando o REDIS: 
-  Podemos implementar cache REDIS nas informações slowchange, como por exemplo a chamada REST para saber se o usuário está apto para votar, ou a validação de que um usuário JÁ REALIZOU seu voto em uma Sessão de Votação.
+- Gostaria de ter implementado testes de performance para o endpoint que realiza o voto do associado, visto que como descrito seria um ponto de gargalo da aplicação. Algumas melhorias que poderiam ser aplicadas para garantir uma boa performance:
+	- Implementar cache usando o REDIS:
+		- Podemos implementar cache REDIS nas informações slowchange, como por exemplo a chamada REST para saber se o usuário está apto para votar, ou a validação de que um usuário JÁ REALIZOU seu voto em uma Sessão de Votação.
