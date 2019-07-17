@@ -125,3 +125,7 @@ Acessar a documentação Swagger do serviço
 
 	- Escalabilidade horizontal:
 		- Utilizando a nuvem, podemos escalar horizontalmente adicionando instâncias à aplicação conforme a demanda.
+
+- Segurança:
+	- Implementação de JWT Token para autenticação e autorização do uso das API
+	- Usar o Spring Vault para remover dados sensíveis do arquivo de configuração da aplicação, como senhas de banco ou de acesso ao message broker
