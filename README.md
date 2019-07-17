@@ -113,6 +113,11 @@ Acessar a documentação Swagger do serviço
 	3. Configurei o Heroku para, ao término da execução do build do Travis, realizar o deploy da aplicação no ambiente cloud
 
 
+## Versionamento:
+
+- Optei por adicionar na URI o versionamento para as API:
+![Imagem com o versionamento das API](https://raw.githubusercontent.com/andrewsdosreis/poll-service/master/api_version.png)
+
 ## Melhorias:
 
 - O log está sendo gravado numa pasta /logs na raiz da aplicação. Uma melhoria seria implementar um FileBeats para coletar o texto e enviar para um ambiente usando a tecnologia ELK
