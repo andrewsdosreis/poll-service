@@ -114,7 +114,8 @@ public class PollService {
     }
 
     private void checkIfTopicAlreadyHasAnOpenedPoll(CreatePollDto createPoll) {
-        Optional<Poll> poll = pollRepository.findByTopic_IdAndEndDateAfter(createPoll.getTopicId(), LocalDateTime.now());
+        Optional<Poll> poll = pollRepository
+                                .findByTopic_IdAndEndDateAfter(createPoll.getTopicId(), LocalDateTime.now());
         if (poll.isPresent()) {
             throw new TopicAlreadyHasAnOpenedPollException(poll.get().getTopic().getName());
         }
